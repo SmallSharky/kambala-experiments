@@ -1,0 +1,6 @@
+[submodule "gecko_sdk"]
+	path = 3dparty/gecko_sdk
+	url = https://github.com/SmallSharky/gecko_sdk
+[submodule "3dparty/embedded-cmake-snippets"]
+	path = 3dparty/embedded-cmake-snippets
+	url = https://github.com/SmallSharky/embedded-cmake-snippets
