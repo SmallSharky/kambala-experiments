@@ -51,20 +51,21 @@ target_link_libraries(
   gecko-platform-emdrv
 )
 
-
-add_custom_command (
-  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/hardtesting.bin
-  DEPENDS hardtesting
-  COMMENT "generate .bin file"
-  WORKING_DIREECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMAND ${OBJCOPY_BIN} -O binary ${CMAKE_CURRENT_BINARY_DIR}/hardtesting ${CMAKE_CURRENT_BINARY_DIR}/hardtesting.bin
-  VERBATIM
+add_custom_command(
+    TARGET hardtesting
+    POST_BUILD
+    BYPRODUCTS hardtesting.bin
+    DEPENDS hardtesting
+    COMMAND ${OBJCOPY_BIN} -O binary "$<TARGET_FILE:hardtesting>" "$<TARGET_FILE:hardtesting>.bin"
+    COMMAND arm-none-eabi-size hardtesting
+    VERBATIM
 )
 
 add_custom_target(
-  hardtesting.bin-target ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/hardtesting.bin
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMAND arm-none-eabi-size hardtesting
+    flash-hardtesting
+    DEPENDS hardtesting.bin
+    COMMAND pilkki write -i hardtesting.bin
+    COMMAND pilkki reset
 )
 
 
